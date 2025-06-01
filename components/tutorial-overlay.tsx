@@ -61,7 +61,12 @@ export function TutorialOverlay() {
                 Step {state.tutorialStep + 1} of {tutorialSteps.length}
               </div>
             </div>
-            <Button variant="ghost" size="sm" onClick={() => dispatch({ type: "SKIP_TUTORIAL" })}>
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              onClick={() => dispatch({ type: "SKIP_TUTORIAL" })}
+              className="text-slate-300 hover:text-white hover:bg-slate-700"
+            >
               <X className="h-4 w-4" />
             </Button>
           </div>

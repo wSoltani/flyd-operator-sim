@@ -37,7 +37,7 @@ export function HelpOverlay() {
               variant="ghost"
               size="sm"
               onClick={() => dispatch({ type: "HIDE_HELP" })}
-              className="text-gray-400 hover:text-white"
+              className="text-slate-300 hover:text-white hover:bg-slate-700"
             >
               <X className="h-5 w-5" />
             </Button>

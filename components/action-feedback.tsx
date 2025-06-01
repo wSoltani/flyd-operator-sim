@@ -76,7 +76,7 @@ export function ActionFeedback() {
             variant="ghost"
             size="sm"
             onClick={() => dispatch({ type: "CLEAR_FEEDBACK" })}
-            className="text-gray-400 hover:text-white"
+            className="text-slate-300 hover:text-white hover:bg-slate-700"
           >
             <X className="h-4 w-4" />
           </Button>
