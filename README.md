@@ -133,10 +133,6 @@ pnpm build
 npm run build
 ```
 
-## Generated with qmims
-
-This README was generated with [qmims](https://github.com/wSoltani/qmims), a tool that helps create professional documentation for your projects.
-
 ## Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
@@ -149,3 +145,7 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 - Inspired by real-world operations at [Fly.io](https://fly.io)
 - Built with [Next.js](https://nextjs.org/) and [Tailwind CSS](https://tailwindcss.com/)
+
+## Generated with qmims
+
+This README was generated with [qmims](https://github.com/wSoltani/qmims), a tool that helps create professional documentation for your projects.
