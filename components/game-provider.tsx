@@ -1245,8 +1245,11 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
     return () => clearInterval(interval);
   }, [state.gameStarted, state.paused, state.gameSpeed, state.gameEnded]);
 
-  // Keep track of incident interval with a ref
   const incidentIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  const stateRef = useRef(state);
+  useEffect(() => {
+    stateRef.current = state;
+  }, [state]);
 
   // Setup and teardown incident generation
   useEffect(() => {
@@ -1259,28 +1262,17 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
     // Only create a new interval if the game is running
     if (!state.gameStarted || state.paused || state.gameEnded) return;
 
-    console.log("Setting up incident interval...");
-
     incidentIntervalRef.current = setInterval(() => {
-      console.log("Incident check running...");
-
+      const currentState = stateRef.current;
       // Select a random worker for incident generation
-      const workers = state.workers;
+      const workers = currentState.workers;
       if (!workers || workers.length === 0) {
-        console.log("No workers found");
         return;
       }
       const worker = workers[Math.floor(Math.random() * workers.length)];
       if (!worker) {
-        console.log("No worker found");
         return;
       }
-
-      console.log("Worker state:", {
-        flydStatus: worker.flydStatus,
-        status: worker.status,
-        activeFSMs: worker.activeFSMs.length,
-      });
 
       // Check if any worker has active migrations (drain in progress)
       const hasMigrations =
@@ -1294,10 +1286,6 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
         worker.status === "critical" || worker.status === "degraded";
 
       if (shouldPauseIncidents) {
-        console.log(
-          "Pausing incidents due to worker state:",
-          worker.status === "degraded" ? "Worker degraded" : "Critical state"
-        );
         return;
       }
 
@@ -1305,14 +1293,9 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
       const stressMultiplier = worker.status === "degraded" ? 1.5 : 1.0;
       const incidentRate = baseIncidentRate * stressMultiplier;
 
-      console.log("Incident rate:", incidentRate);
-
       const shouldCreateIncident = Math.random() < incidentRate;
-      console.log("Should create incident:", shouldCreateIncident);
 
       if (shouldCreateIncident) {
-        console.log("Creating incident...");
-
         // Context-aware incident selection
         const possibleIncidents = [];
 
@@ -1489,10 +1472,7 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
           );
         }
 
-        console.log("Possible incidents:", filteredIncidents.length);
-
         if (filteredIncidents.length === 0) {
-          console.log("No possible incidents!");
           return;
         }
 
@@ -1500,12 +1480,14 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
           filteredIncidents[
             Math.floor(Math.random() * filteredIncidents.length)
           ];
-        const isFirstTime = !state.seenIncidentTypes.includes(incident.type);
+        const isFirstTime = !currentState.seenIncidentTypes.includes(
+          incident.type
+        );
         // Only add to seenIncidentTypes if this is the first time
-        let updatedSeenIncidentTypes = state.seenIncidentTypes;
+        let updatedSeenIncidentTypes = currentState.seenIncidentTypes;
         if (isFirstTime) {
           updatedSeenIncidentTypes = [
-            ...state.seenIncidentTypes,
+            ...currentState.seenIncidentTypes,
             incident.type,
           ];
         }
@@ -1519,18 +1501,15 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
           ...incident,
         };
 
-        console.log("Dispatching incident:", newIncident);
-
         dispatch({
           type: "ADD_INCIDENT",
           incident: newIncident,
           seenIncidentTypes: updatedSeenIncidentTypes,
         });
       }
-    }, 5000); // Reduced to 5 seconds for testing
+    }, 5000);
 
     return () => {
-      console.log("Clearing incident interval");
       if (incidentIntervalRef.current) {
         clearInterval(incidentIntervalRef.current);
         incidentIntervalRef.current = null;
