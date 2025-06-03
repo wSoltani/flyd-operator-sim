@@ -1536,13 +1536,7 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
         incidentIntervalRef.current = null;
       }
     };
-  }, [
-    state.gameStarted,
-    state.paused,
-    state.gameEnded,
-    state.workers,
-    state.seenIncidentTypes,
-  ]); // Added workers and seenIncidentTypes
+  }, [state.gameStarted, state.paused, state.gameEnded]);
 
   return (
     <GameContext.Provider value={{ state, dispatch }}>
