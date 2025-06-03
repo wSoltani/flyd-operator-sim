@@ -1536,7 +1536,13 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
         incidentIntervalRef.current = null;
       }
     };
-  }, [state.gameStarted, state.paused, state.gameEnded]); // Removed state.workers and state.incidents from dependencies
+  }, [
+    state.gameStarted,
+    state.paused,
+    state.gameEnded,
+    state.workers,
+    state.seenIncidentTypes,
+  ]); // Added workers and seenIncidentTypes
 
   return (
     <GameContext.Provider value={{ state, dispatch }}>
