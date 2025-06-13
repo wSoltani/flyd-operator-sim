@@ -83,11 +83,11 @@ export function HelpOverlay() {
                   Header Controls
                 </h4>
                 <ul className="space-y-1 text-sm text-gray-300">
-                  <li>
+                  {/* <li>
                     <Pause className="inline h-4 w-4 mr-1" />{" "}
                     <strong>Pause/Resume:</strong> Pause or resume the
                     simulation
-                  </li>
+                  </li> */}
                   <li>
                     <RefreshCw className="inline h-4 w-4 mr-1" />{" "}
                     <strong>Restart:</strong> Restart the entire game
